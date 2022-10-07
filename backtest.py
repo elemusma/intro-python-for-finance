@@ -93,3 +93,33 @@ totalR=round((totalR-1)*100,2)
 if(ng>0):
     avgGain=gains/ng
     maxR=str(max(percentchange))
+else:
+    avgGain=0
+    maxR="undefined"
+
+if(nl>0):
+    avgLoss=losses/nl
+    maxL=str(max(percentchange))
+    ratio=str(-avgGain/avgLoss)
+else:
+    avgLoss=0
+    maxL="undefined"
+    ratio="inf"
+
+if(ng>0 or nl>0):
+    battingAvg=ng/(ng+nl)
+else:
+    battingAvg=0
+
+print()
+print("Results for "+ stock +" going back to "+str(df.index[0])+", Sample size: "+str(ng+nl)+" trades")
+print("EMAs used: "+str(emasUsed))
+print("Batting Avg: "+ str(battingAvg))
+print("Gain/loss ratio: "+ratio)
+print("Average Gain: "+str(avgGain))
+print("Average Loss: "+str(avgLoss))
+print("Max Return: "+ maxR)
+print("Max Loss: "+ maxL)
+print("Total return over "+str(ng+nl)+" trades: "+ str(totalR)+"%")
+#print("Example return Simulating "+str(n)+ " trades: "+ str(nReturn)+"%")
+print()
