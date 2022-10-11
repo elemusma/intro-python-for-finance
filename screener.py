@@ -11,12 +11,13 @@ yf.pdr_override() # <== that's all it takes :-)
 start = dt.datetime(2017,12,1)
 now = dt.datetime.now()
 
-root = Tk()
-ftypes = [(".xlsm","*.xlsx",".xls")]
-ttl = "Title"
-dirl = 'C:\\'
-filePath = askopenfilename(filetypes = ftypes, intialdir = dirl, title = ttl)
-# filePath=r"/Users/efrainlemus-martinez/Desktop/python/RichardStocks.xlsx"
+# root = Tk()
+# ftypes = [(".xlsm","*.xlsx",".xls")]
+# ttl = "Title"
+# # dirl = '/Users/'
+# dirl = 'C:\\'
+# filePath = askopenfilename(filetypes = ftypes, intialdir = dirl, title = ttl)
+filePath=r"/Users/efrainlemus-martinez/Desktop/python/RichardStocks.xlsx"
 
 stocklist=pd.read_excel(filePath)
 stocklist=stocklist.head()
@@ -97,7 +98,7 @@ for i in stocklist.index:
 
 print(exportList)
 
-newFile=os.path.dirname(filePath)+"/ScreenOutput.xlsx"
+newFile=os.path.dirname(filePath)+"/ScreenOutput1.xlsx"
 
 writer = ExcelWriter(newFile)
 exportList.to_excel(writer,"Sheet1")
