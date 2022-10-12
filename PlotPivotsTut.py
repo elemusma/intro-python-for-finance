@@ -30,10 +30,10 @@ while stock != "quit": #runs this loop until user enters 'quit' (can do many sto
 
         Range=Range[1:9]
         Range.append(value)
-        dateRange=Range[1:9]
+        dateRange=dateRange[1:9]
         dateRange.append(i)
 
-        if currentMax==max(Range,default=0): 
+        if currentMax==max(Range, default=0): 
             counter+=1 #keep track of how many days straight this current max is the relative max
         else:
             counter=0
@@ -45,13 +45,13 @@ while stock != "quit": #runs this loop until user enters 'quit' (can do many sto
             pivots.append(lastPivot)
             dates.append(lastDate)
 
-        print()
+    print()
 
-        print(str(pivots))
-        print(str(dates))
+    # print(str(pivots))
+    # print(str(dates))
 
-        for index in range(len(pivots)):
-            print(str(pivots[index])+": "+str(dates[index]))
-        plt.show()
+    for index in range(len(pivots)):
+        print(str(pivots[index])+": "+str(dates[index]))
+    plt.show()
 
     stock=input("Enter the stock symbol :") #asks for new stock
