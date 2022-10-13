@@ -49,9 +49,13 @@ while stock != "quit": #runs this loop until user enters 'quit' (can do many sto
 
     # print(str(pivots))
     # print(str(dates))
+    timeD=dt.timedelta(days=30)
 
     for index in range(len(pivots)):
         print(str(pivots[index])+": "+str(dates[index]))
+        plt.plot_date([dates[index],dates[index]+timeD],
+            [pivots[index],pivots[index]], linestyle="-", linewidth=2, marker=",")
+            
     plt.show()
 
     stock=input("Enter the stock symbol :") #asks for new stock
