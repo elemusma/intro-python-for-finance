@@ -1,3 +1,4 @@
+#import relevant libraries
 import yfinance as yf
 import datetime as dt
 import pandas as pd
@@ -7,24 +8,28 @@ import matplotlib.dates as mdates
 import matplotlib.ticker as mticker
 import datetime as datetime
 import numpy as np
-from mpl_finance import candlestick_ohlc
+# from mplfinance import candlestick_ohlc
+from mplfinance.original_flavor import candlestick_ohlc
 
 yf.pdr_override() #activate yahoo finance workaround
 
 smasUsed=[10,30,50] #choose smas, 10 day simple, 30 day simple, 50 day simple
 
-start=dt.datetime(2020,1,1)-dt.datetime(days=max(smasUsed)) #sets start point of dataframe
+start=dt.datetime(2020,1,1)-dt.timedelta(days=max(smasUsed)) #sets start point of dataframe
 now=dt.datetime.now() #sets end point of dataframe
 stock=input("Enter the stock symbol : ") #asks for stock ticker
 
 while stock != "quit": #runs this loop until user enters 'quit' (can do many stocks in a row)
-    prices=pdr.get_data_yahoo(stock,start,now) #fetches stock price data, saves as data frame
 
-    fig,ax1=plt.subplots() #create plots
+    prices = pdr.get_data_yahoo(stock,start,now) #fetches stock price data, saves as data frame
+
+    fig, ax1 = plt.subplots() #create plots
+
     #calculate moving averages
+
     for x in smasUsed: #this for loop calculates the SMAs for the stated periods and appends to dataframe
         sma=x
-        prices['SMA_'+str(sma)]=prices.iloc[:,4].rolling(window=sma).mean() #calculates sma and creates col
+        prices['SMA_'+str(sma)] = prices.iloc[:,4].rolling(window=sma).mean() #calculates sma and creates col
     
     #calculate bollinger bands
     BBperiod=15 #choose moving average - 20 is the standard
@@ -42,11 +47,10 @@ while stock != "quit": #runs this loop until user enters 'quit' (can do many sto
 
     prices["RolHigh"]=prices["High"].rolling(window=Period).max() #finds high of period
     prices["RolLow"]=prices["Low"].rolling(window=Period).min() #finds low of period
-    prices["stok"]=((prices["Adj Close"]-prices["Rollow"])/(prices["RolHigh"]-prices["RolLow"]))*100 #Finds 10.1 stoch
+    prices["stok"]=((prices["Adj Close"]-prices["RolLow"])/(prices["RolHigh"]-prices["RolLow"]))*100 #Finds 10.1 stoch
     prices["K"]=prices["stok"].rolling(window=K).mean() #finds 10.4 stoch
     prices["D"]=prices["K"].rolling(window=D).mean() #finds 10.4.4 stoch
     prices["GD"]=prices["High"] #creates GD column to store green dots
-
     ohlc=[] #create OHLC array which will store price data for the candlestick chart
 
     #delete extra dates
@@ -63,7 +67,7 @@ while stock != "quit": #runs this loop until user enters 'quit' (can do many sto
     #go through price history to create candlesticks and GD+Blue dots
     for i in prices.index:
         #append OHLC prices to make the candlestick
-        append_me=prices["Date"][i],prices["Open"],prices["High"],prices["Low"],prices["Adj Close"],prices["Volume"][i]
+        append_me=prices["Date"][i],prices["Open"][i],prices["High"][i],prices["Low"][i],prices["Adj Close"][i],prices["Volume"][i]
         ohlc.append(append_me)
 
         #check for green dot
@@ -95,11 +99,10 @@ while stock != "quit": #runs this loop until user enters 'quit' (can do many sto
     prices['LowerBand'].plot(label='close', color='lightgray')
 
     #plot candlesticks
-    candlestick_ohlc(ax1,ohlc,width=.5,colorup='k',colordown='r',alpha=0.75)
+    candlestick_ohlc(ax1, ohlc, width=.5, colorup='k', colordown='r', alpha=0.75)
 
-    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-#change x axis back to datestamps
-    ax1.xaxis.set_major_formatter(mticker.MaxNLocator(8)) #add more x axis labels
+    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d')) #change x axis back to datestamps
+    ax1.xaxis.set_major_locator(mticker.MaxNLocator(8)) #add more x axis labels
     plt.tick_params(axis='x',rotation=45) #rotate dates for readability
 
     #pivot points
